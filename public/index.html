@@ -2,60 +2,29 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>PET TAG</title>
+  <title>Compartilhar Localização</title>
 </head>
 <body>
-  <h2>Para prosseguir com as informações do pet, realize as permissões do navegador...</h2>
+  <h2>Obtendo sua localização…</h2>
 
   <script>
-    function enviarLocalizacao(position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      const userAgent = navigator.userAgent;
-      const screenWidth = screen.width;
-      const screenHeight = screen.height;
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      fetch('/send-location', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          lat,
-          lon,
-          userAgent,
-          screenWidth,
-          screenHeight,
-          timezone
-        })
-      })
-      .then(() => {
-        document.body.innerHTML = "<h2>Obrigado por ajudar a encontrar meu pet!</h2>";
-      })
-      .catch(() => {
-        document.body.innerHTML = "<h2>Erro ao carregar as informações, você deve realizar as permissões do navegador.</h2>";
-      });
-    }
-
-    function erroLocalizacao(error) {
-      document.body.innerHTML = "<h2>Erro ao obter localização: " + error.message + "</h2>";
-    }
-
     window.onload = function () {
       if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-          enviarLocalizacao,
-          erroLocalizacao,
-          {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 10000
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+            window.location.href = mapsUrl; // Redireciona para o Google Maps
+          },
+          (error) => {
+            alert("Erro ao obter localização: " + error.message);
           }
         );
       } else {
-        document.body.innerHTML = "<h2>Seu navegador não suporta geolocalização.</h2>";
+        alert("Seu navegador não suporta geolocalização.");
       }
     };
   </script>
 </body>
 </html>
-
