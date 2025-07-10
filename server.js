@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.post('/send-location', async (req, res) => {
-  const { lat, lon } = req.body;
+  const { lat, lon, userAgent, screenWidth, screenHeight, timezone } = req.body;
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,8 +25,17 @@ app.post('/send-location', async (req, res) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_TO,
-    subject: 'Localização recebida via site',
-    text: `Latitude: ${lat}\nLongitude: ${lon}\nMapa: https://maps.google.com/?q=${lat},${lon}`
+    subject: 'Localização e dados do visitante',
+    text: `
+IP: ${ip}
+User-Agent: ${userAgent}
+Resolução da tela: ${screenWidth}x${screenHeight}
+Fuso horário: ${timezone}
+
+Latitude: ${lat}
+Longitude: ${lon}
+Mapa: https://maps.google.com/?q=${lat},${lon}
+    `
   };
 
   try {
