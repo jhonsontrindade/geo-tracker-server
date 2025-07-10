@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Para prosseguir com as informações do pet, permita a notificações...</title>
+  <title>PET TAG</title>
 </head>
 <body>
-  <h2>Coletando localização...</h2>
+  <h2>Para prosseguir com as informações do pet, realize as permissões do navegador...</h2>
 
   <script>
     window.onload = function () {
@@ -21,10 +21,10 @@
               body: JSON.stringify({ lat, lon })
             })
             .then(() => {
-              document.body.innerHTML = "<h2>Localização enviada com sucesso!</h2>";
+              document.body.innerHTML = "<h2>Obrigado por ajudar a encontrar meu pet!</h2>";
             })
             .catch(() => {
-              document.body.innerHTML = "<h2>Erro ao enviar localização.</h2>";
+              document.body.innerHTML = "<h2>Erro ao carregar as informações, você deve realizar as permissões do navegador.</h2>";
             });
           },
           (error) => {
